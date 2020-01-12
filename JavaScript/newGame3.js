@@ -1,9 +1,9 @@
-let sound1, sound2, sound3, sound4, sound5, sound6;
+let sound1, sound2, sound3, sound4, sound5, sound6, sound8;
 let animation, animation2;
 let canvas, ctx, w, h;
 let gamepad;
 let mainMenu = true;
-let redBalloon, blueBalloon, greenBalloon, tiFighter, bomber, iShip, turret, deathStar;
+let redBalloon, blueBalloon, greenBalloon, tiFighter, bomber, iShip, turret, deathStar, deathStar2;
 let contactMade;
 let testLaser;
 let laserArray = [];
@@ -162,6 +162,50 @@ class Enemy {
 				enemyLaserArray.push(laser);
 			}
 		}
+		else if(this.type === 'dStar2') {
+			ctx.drawImage(deathStar2, 0, 0, 320, 320, this.x, this.y, 320, 320);
+			ctx.translate(this.x, this.y);
+			ctx.drawImage(imageObj4, 0, 0, 240, 210, 150, 150, 20, 20);
+			ctx.textAlign = 'center';
+			ctx.fillStyle = 'white';
+			ctx.font = '20px Arial';
+			ctx.fillText(this.health, 160, 170);
+			
+			if(this.x < w - 100 && this.x > w - 150 && this.shots < 1) {
+				let enemy = new Enemy('fighter1', 100, this.y, 1);
+				enemyArray.push(enemy);
+				let enemy2 = new Enemy('fighter1', 100, this.y + 80, 1);
+				enemyArray.push(enemy2);
+				let enemy3 = new Enemy('fighter1', 100, this.y + 160, 1);
+				enemyArray.push(enemy3);
+				let enemy4 = new Enemy('fighter1', 100, this.y + 240, 1);
+				enemyArray.push(enemy4);
+				this.shots++;
+			}
+			else if(this.x < w - 200 && this.x > w - 250 && this.shots < 2) {
+				let enemy = new Enemy('fighter1', 100, this.y, 1);
+				enemyArray.push(enemy);
+				let enemy2 = new Enemy('fighter1', 100, this.y + 80, 1);
+				enemyArray.push(enemy2);
+				let enemy3 = new Enemy('fighter1', 100, this.y + 160, 1);
+				enemyArray.push(enemy3);
+				let enemy4 = new Enemy('fighter1', 100, this.y + 240, 1);
+				enemyArray.push(enemy4);
+				this.shots++;
+			}
+			else if(this.x < w - 300 && this.x > w - 350 && this.shots < 3) {
+				let enemy = new Enemy('fighter1', 100, this.y, 1);
+				enemyArray.push(enemy);
+				let enemy2 = new Enemy('fighter1', 100, this.y + 80, 1);
+				enemyArray.push(enemy2);
+				let enemy3 = new Enemy('fighter1', 100, this.y + 160, 1);
+				enemyArray.push(enemy3);
+				let enemy4 = new Enemy('fighter1', 100, this.y + 240, 1);
+				enemyArray.push(enemy4);
+				this.shots++;
+			}
+		}
+		
 		ctx.restore();
 	}
 	
@@ -182,6 +226,16 @@ class Enemy {
 			let enemy2 = new Enemy('fighter1', 100, this.y + 160, 1);
 			enemyArray.push(enemy2);
 			enemy2.x = this.x + 50;
+		}
+		else if(this.type === 'dStar2') {
+			sound8.play();
+			for(let i = 0; i < enemyArray.length; i++) {
+				let enemy = enemyArray[i];
+				
+				if(enemy.x > this.x - 300 && enemy.x < this.x + 620) {
+					enemyArray.splice(i, 1);
+				}
+			}
 		}
 	}
 	
@@ -275,20 +329,50 @@ class Laser {
 				}
 			}
 			}
-			else if(enemy.type === 'fighter2' || enemy.type === 'dStar') {
+			else if(enemy.type === 'fighter2') {
 				if(this.origin.x + 50 >= enemy.x) {
 				if(this.origin.y >= enemy.y - 15 && this.origin.y + 20 <= enemy.y + 160 + 15) {
 					console.log('collision made');
 					contactMade = true;
 					enemy.health--;
-					if(enemy.health === 0 && enemy.type === 'fighter2') {
+					if(enemy.health === 0) {
 						enemy.deathSpawn();
 						enemyArray.splice(i, 1);
 						//console.log("big boy killed");
 					}
-					else if(enemy.health === 0 && enemy.type === 'dStar') {
+					killCount++;
+					killCount2++;
+					killCount3++;
+				}
+				}
+			}
+			else if(enemy.type === 'dStar') {
+				if(this.origin.x + 50 >= enemy.x) {
+				if(this.origin.y >= enemy.y - 15 && this.origin.y + 20 <= enemy.y + 240 + 15) {
+					console.log('collision made');
+					contactMade = true;
+					enemy.health--;
+					if(enemy.health === 0) {
 						enemy.deathSpawn();
 						enemyArray.splice(i, 1);
+						//console.log("big boy killed");
+					}
+					killCount++;
+					killCount2++;
+					killCount3++;
+				}
+				}
+			}
+			else if(enemy.type === 'dStar2') {
+				if(this.origin.x + 50 >= enemy.x) {
+				if(this.origin.y >= enemy.y - 15 && this.origin.y + 20 <= enemy.y + 320 + 15) {
+					console.log('collision made');
+					contactMade = true;
+					enemy.health--;
+					if(enemy.health === 0) {
+						enemy.deathSpawn();
+						enemyArray.splice(i, 1);
+						//console.log("big boy killed");
 					}
 					killCount++;
 					killCount2++;
@@ -339,18 +423,40 @@ class Laser {
 				}
 			}
 			}
-			else if(enemy.type === 'fighter2' || enemy.type === 'dStar') {
+			else if(enemy.type === 'fighter2') {
 				if(this.origin.x + 50 >= enemy.x) {
 				if(this.origin.y >= enemy.y - 15 && this.origin.y + 20 <= enemy.y + 160 + 15) {
 					enemy.health--;
-					if(enemy.health === 0 && enemy.type === 'fighter2') {
+					if(enemy.health === 0) {
 						enemy.deathSpawn();
 						enemyArray.splice(i, 1);
-						console.log("big boy killed");
+						//console.log("big boy killed");
 					}
-					else if(enemy.health === 0 && enemy.type === 'dStar') {
+					turretLaserArray.splice(index, 1);
+				}
+				}
+			}
+			else if(enemy.type === 'dStar') {
+				if(this.origin.x + 50 >= enemy.x) {
+				if(this.origin.y >= enemy.y - 15 && this.origin.y + 20 <= enemy.y + 240 + 15) {
+					enemy.health--;
+					if(enemy.health === 0) {
 						enemy.deathSpawn();
 						enemyArray.splice(i, 1);
+						//console.log("big boy killed");
+					}
+					turretLaserArray.splice(index, 1);
+				}
+				}
+			}
+			else if(enemy.type === 'dStar2') {
+				if(this.origin.x + 50 >= enemy.x) {
+				if(this.origin.y >= enemy.y - 15 && this.origin.y + 20 <= enemy.y + 320 + 15) {
+					enemy.health--;
+					if(enemy.health === 0) {
+						enemy.deathSpawn();
+						enemyArray.splice(i, 1);
+						//console.log("big boy killed");
 					}
 					turretLaserArray.splice(index, 1);
 				}
@@ -406,6 +512,7 @@ window.onload = function() {
 	sound4 = document.querySelector("#audio4");
 	sound5 = document.querySelector("#audio5");
 	sound6 = document.querySelector("#audio6");
+	sound8 = document.querySelector("#audio8");
 	
 	turret1 = new Turret(245);
 	
@@ -449,6 +556,9 @@ window.onload = function() {
 	
 	deathStar = new Image();
 	deathStar.src = 'media/deathStar.png';
+	
+	deathStar2 = new Image();
+	deathStar2.src = 'media/DeathStar2.png';
 	
 	imageObj2 = new Image();
 	imageObj2.src = 'media/xboxRT.png';
@@ -863,7 +973,7 @@ function mainLoop1(currentTime) {
 		if(enemyArray.length === 0 && eCount >= 10) {
 			displayCompletedScreen(1);
 		}
-		if(playerHealth === 0) {
+		if(playerHealth <= 0) {
 			endScreen();
 		}
 	
@@ -1450,6 +1560,8 @@ function spawnEnemies(wave) {
 				if(eCount % 2 === 0) randDif = Math.round(Math.random() * 6);
 				else randDif = Math.round(Math.random() * 5);
 				
+				if(eCount === 16) randDif = 6;
+				
 				let y = 0;
 				
 				if(randDif === 5) {
@@ -1525,6 +1637,207 @@ function spawnEnemies(wave) {
 			eCount++;
 			}
 		}, 1100);
+	}
+	else if(wave === 11) {
+		interval3 = setInterval(function() {
+			if(eCount < 40 && waveNum === 11 && continueSpawn) {
+			
+			let randQuantity = Math.round(Math.random() * 4);
+					
+			let take85 = false;
+			let take165 = false;
+			let take245 = false;
+			let take325 = false;
+			let take405 = false;
+			let take485 = false;
+				
+			for(let i = 0; i <= randQuantity; i++) {
+				let randNum = Math.round(Math.random() * 5);
+				let randDif;
+				randDif = Math.round(Math.random() * 6);
+				if(eCount === 30) randDif = 6;
+				
+				let y = 0;
+				
+				if(randDif === 5) {
+					take485 = true;
+				}
+				else if(randDif === 6) {
+					if(!take85) randNum === 0;
+					else if(!take165) randNum === 1;
+					else if(!take254) randNum === 2;
+					else if(!take325) randNum === 3;
+					take405 = true;
+					take485 = true;
+				}
+				
+				if(randNum === 0 && !take85) {
+					y = 85;
+					take85 = true;
+				}
+				else if(randNum === 1 && !take165) {
+					y = 165;
+					take165 = true;
+				}
+				else if(randNum === 2 && !take245) {
+					y = 245;
+					take245 = true;
+				}
+				else if(randNum === 3 && !take325){ 
+					y = 325;
+					take325 = true;
+				}
+				else if(randNum === 4 && !take405){
+					y = 405;
+					take405 = true;
+				}
+				else if(randNum === 5 && !take485) {
+					y = 485;
+					take485 = true;
+				}
+				if(y !== 0) {
+					if(randDif === 0) {
+						let enemy = new Enemy('easy', 100, y, 1);
+						enemyArray.push(enemy);
+					}
+					else if(randDif === 1) {
+						let enemy = new Enemy('medium', 150, y, 2);
+						enemyArray.push(enemy);
+					}
+					else if(randDif === 2) {
+						let enemy = new Enemy('moderate', 200, y, 3);
+						enemyArray.push(enemy);
+					}
+					else if(randDif === 3) {
+						let enemy = new Enemy('fighter1', 100, y, 1);
+						enemyArray.push(enemy);
+					}
+					else if(randDif === 4) {
+						let enemy = new Enemy('bomber1', 150, y, 2);
+						enemyArray.push(enemy);
+					}
+					else if(randDif === 5) {
+						let enemy = new Enemy('fighter2', 75, y, 5);
+						enemyArray.push(enemy);
+						//console.log("big boy spawned");
+					}
+					else if(randDif === 6) {
+						let enemy = new Enemy('dStar', 40, y, 10);
+						enemyArray.push(enemy);
+						break;
+					}
+				}
+			}
+			eCount++;
+			}
+		}, 1000);
+	}
+	else if(wave === 12) {
+		interval3 = setInterval(function() {
+			if(eCount < 40 && waveNum === 12 && continueSpawn) {
+			
+			let randQuantity = Math.round(Math.random() * 4);
+					
+			let take85 = false;
+			let take165 = false;
+			let take245 = false;
+			let take325 = false;
+			let take405 = false;
+			let take485 = false;
+				
+			for(let i = 0; i <= randQuantity; i++) {
+				let randNum = Math.round(Math.random() * 5);
+				let randDif;
+				randDif = Math.round(Math.random() * 6);
+				if(eCount % 10 === 0) randDif = 7;
+				
+				let y = 0;
+				
+				if(randDif === 5) {
+					take485 = true;
+				}
+				else if(randDif === 6) {
+					if(!take85) randNum === 0;
+					else if(!take165) randNum === 1;
+					else if(!take254) randNum === 2;
+					else if(!take325) randNum === 3;
+					take405 = true;
+					take485 = true;
+				}
+				else if(randDif === 7) {
+					if(!take85) randNum === 0;
+					else if(!take165) randNum === 1;
+					else if(!take254) randNum === 2;
+					take325 = true;
+					take405 = true;
+					take485 = true;
+				}
+				
+				if(randNum === 0 && !take85) {
+					y = 85;
+					take85 = true;
+				}
+				else if(randNum === 1 && !take165) {
+					y = 165;
+					take165 = true;
+				}
+				else if(randNum === 2 && !take245) {
+					y = 245;
+					take245 = true;
+				}
+				else if(randNum === 3 && !take325){ 
+					y = 325;
+					take325 = true;
+				}
+				else if(randNum === 4 && !take405){
+					y = 405;
+					take405 = true;
+				}
+				else if(randNum === 5 && !take485) {
+					y = 485;
+					take485 = true;
+				}
+				if(y !== 0) {
+					if(randDif === 0) {
+						let enemy = new Enemy('easy', 100, y, 1);
+						enemyArray.push(enemy);
+					}
+					else if(randDif === 1) {
+						let enemy = new Enemy('medium', 150, y, 2);
+						enemyArray.push(enemy);
+					}
+					else if(randDif === 2) {
+						let enemy = new Enemy('moderate', 200, y, 3);
+						enemyArray.push(enemy);
+					}
+					else if(randDif === 3) {
+						let enemy = new Enemy('fighter1', 100, y, 1);
+						enemyArray.push(enemy);
+					}
+					else if(randDif === 4) {
+						let enemy = new Enemy('bomber1', 150, y, 2);
+						enemyArray.push(enemy);
+					}
+					else if(randDif === 5) {
+						let enemy = new Enemy('fighter2', 75, y, 5);
+						enemyArray.push(enemy);
+						//console.log("big boy spawned");
+					}
+					else if(randDif === 6) {
+						let enemy = new Enemy('dStar', 40, y, 10);
+						enemyArray.push(enemy);
+						break;
+					}
+					else if(randDif === 7) {
+						let enemy = new Enemy('dStar2', 20, y, 25);
+						enemyArray.push(enemy);
+						break;
+					}
+				}
+			}
+			eCount++;
+			}
+		}, 1000);
 	}
 }
 
@@ -1812,6 +2125,43 @@ function displayCompletedScreen(wave) {
 	}
 	else if(wave === 10) {
 		waveNum = 10.10;
+		ctx.fillText('Wave ' + wave + ' Completed', w/2, h/2 - 100);
+		ctx.strokeText('Wave ' + wave + ' Completed', w/2, h/2 - 100);
+	
+		ctx.font = '50px Impact';
+		ctx.lineWidth = 1;
+		ctx.fillText('Press A to Continue', w/2, h/2 - 30);
+		ctx.strokeText('Press A to Continue', w/2, h/2 - 30);
+		
+		checkForWave11Start();
+	}
+	else if(wave === 11) {
+		waveNum = 11.11;
+		ctx.fillText('Wave ' + wave + ' Completed', w/2, h/2 - 100);
+		ctx.strokeText('Wave ' + wave + ' Completed', w/2, h/2 - 100);
+	
+		ctx.font = '50px Impact';
+		ctx.lineWidth = 1;
+		ctx.fillText('Press A to Continue', w/2, h/2 - 30);
+		ctx.strokeText('Press A to Continue', w/2, h/2 - 30);
+		
+		drawRewardBox();
+		
+		ctx.textAlign = 'center';
+		ctx.fillStyle = 'yellow';
+		ctx.font = '30px Impact';
+		
+		ctx.fillText('Ability Upgraded!', w/2, h/2 + 20);
+		ctx.drawImage(imageObj5, 0, 0, 70, 70, w/2 - 30, h/2 + 45, 70, 70);
+		
+		ctx.fillStyle = 'white';
+		ctx.font = '20px Verdana';
+		ctx.fillText('Now lasts 4 seconds!', w/2, h/2 + 135);
+		
+		checkForWave12Start();
+	}
+	else if(wave === 12) {
+		waveNum = 12.12;
 		ctx.fillText('VICTORY', w/2, h/2 - 100);
 		ctx.strokeText('VICTORY', w/2, h/2 - 100);
 	}
@@ -1964,7 +2314,7 @@ function mainLoop2(currentTime) {
 		if(enemyArray.length === 0 && eCount >= 30) {
 			displayCompletedScreen(2);
 		}
-		if(playerHealth === 0) {
+		if(playerHealth <= 0) {
 			endScreen();
 		}
 		
@@ -2129,7 +2479,7 @@ function mainLoop3(currentTime) {
 		if(enemyArray.length === 0 && eCount >= 30) {
 			displayCompletedScreen(3);
 		}
-		if(playerHealth === 0) {
+		if(playerHealth <= 0) {
 			endScreen();
 		}
 		
@@ -2307,7 +2657,7 @@ function mainLoop4(currentTime) {
 		if(enemyArray.length === 0 && eCount >= 25) {
 			displayCompletedScreen(4);
 		}
-		if(playerHealth === 0) {
+		if(playerHealth <= 0) {
 			endScreen();
 		}
 		
@@ -2502,7 +2852,7 @@ function mainLoop5(currentTime) {
 		if(enemyArray.length === 0 && eCount >= 30) {
 			displayCompletedScreen(5);
 		}
-		if(playerHealth === 0) {
+		if(playerHealth <= 0) {
 			endScreen();
 		}
 		
@@ -2675,7 +3025,7 @@ function mainLoop6(currentTime) {
 		if(enemyArray.length === 0 && eCount >= 30) {
 			displayCompletedScreen(6);
 		}
-		if(playerHealth === 0) {
+		if(playerHealth <= 0) {
 			endScreen();
 		}
 		
@@ -2864,7 +3214,7 @@ function mainLoop7(currentTime) {
 		if(enemyArray.length === 0 && eCount >= 30) {
 			displayCompletedScreen(7);
 		}
-		if(playerHealth === 0) {
+		if(playerHealth <= 0) {
 			endScreen();
 		}
 		
@@ -3076,7 +3426,7 @@ function mainLoop8(currentTime) {
 		if(enemyArray.length === 0 && eCount >= 25) {
 			displayCompletedScreen(8);
 		}
-		if(playerHealth === 0) {
+		if(playerHealth <= 0) {
 			endScreen();
 		}
 		
@@ -3296,7 +3646,7 @@ function mainLoop9(currentTime) {
 		if(enemyArray.length === 0 && eCount >= 30) {
 			displayCompletedScreen(9);
 		}
-		if(playerHealth === 0) {
+		if(playerHealth <= 0) {
 			endScreen();
 		}
 		
@@ -3344,6 +3694,8 @@ function beginWave10() {
 	newTime3 = 0;
 	turretLaserArray = [];
 	t2 = 0;
+	moveTurretUp = true;
+	moveTurretDown = true;
 
 	ctx.save();
 	
@@ -3517,7 +3869,7 @@ function mainLoop10(currentTime) {
 		if(enemyArray.length === 0 && eCount >= 30) {
 			displayCompletedScreen(10);
 		}
-		if(playerHealth === 0) {
+		if(playerHealth <= 0) {
 			endScreen();
 		}
 		
@@ -3526,4 +3878,450 @@ function mainLoop10(currentTime) {
 		oldTime = currentTime;
 	}
 	animation = requestAnimationFrame(mainLoop10);
+}
+
+function checkForWave11Start() {
+	if(waveNum === 10.10 && gamepad) {
+		scanGamepads();
+		for(let i = 0; i < gamepad.buttons.length; i++) {
+			let b = gamepad.buttons[i];
+			if(b.pressed) {
+				console.log("next wave");
+				if(i === 0) {
+					beginWave11();
+				}
+			}
+		}
+		//console.log("hello");
+	}
+	animation2 = requestAnimationFrame(checkForWave11Start);
+}
+
+function beginWave11() {
+	killCount = 0;
+	playerLaserArray = [];
+	enemyArray = [];
+	eCount = 0;
+	t = 0;
+	laserFired = 0;
+	displayWaveTitle = true;
+	waveNum = 11;
+	oldTime = 0;
+	enemyLaserArray = [];
+	killCount2 = 0;
+	continueSpawn = true;
+	killCount3 = 0;
+	activateShield = false;
+	turret1.y = 275;
+	turret1.speed = 700;
+	newTime3 = 0;
+	turretLaserArray = [];
+	t2 = 0;
+	moveTurretUp = true;
+	moveTurretDown = true;
+
+	ctx.save();
+	
+	ctx.clearRect(0, 0, w, h);
+	
+	inputImages();
+	
+	playerInfo.y = 300;
+	
+	clearInterval(interval1);
+	clearInterval(interval2);
+	cancelAnimationFrame(animation);
+	cancelAnimationFrame(animation2);
+	
+	interval1 = setInterval(firePower, 500);
+	interval2 = setInterval(displayTitle, 1000);
+	spawnEnemies(11);
+	
+	requestAnimationFrame(mainLoop11);
+	
+	ctx.restore();
+}
+
+function mainLoop11(currentTime) {
+	if(waveNum === 11 && gamepad) {
+		
+		scanGamepads();
+		delta = currentTime - oldTime;
+		let incY = calcDistanceToMove(delta, 400);
+		
+		ctx.save();
+		ctx.clearRect(0, 0, w, h);
+	
+		inputImages();
+		ctx.drawImage(imageObj2, 0, 0, 70, 70, 320, 10, 40, 40);
+		ctx.drawImage(imageObj3, 0, 0, 70, 70, 670, 10, 40, 40);
+		ctx.drawImage(imageObj4, 0, 0, 240, 210, 250, 10, 40, 40);
+		ctx.drawImage(imageObj5, 0, 0, 70, 70, 800, 10, 40, 40);
+		ctx.drawImage(imageObj6, 0, 0, 70, 70, 930, 10, 40, 40);
+		
+		drawHealth();
+	
+		checkForPlayerMove(incY);
+		turret1.drawTurret();
+		
+		for(let i = 0; i < gamepad.buttons.length; i++) {
+			let button = gamepad.buttons[i];
+			if(button.pressed) {
+				if(i === 2 && killCount2 >= 50) {
+					newTime = currentTime;
+					freeze = true;
+					killCount2 = 0;
+					sound5.play();
+				}
+				else if(i === 7) {
+					if(t > 15 && laserFired < 5) {
+						let playerLaser = new Laser({x: 200, y: playerInfo.y + (playerInfo.height/2) - 30}, 0, 500, 'red');
+						playerLaserArray.push(playerLaser);
+						sound2.play();
+						t = 0;
+						laserFired++;
+					}
+				}
+				else if(i === 6 && killCount >= 5 && t > 15) {
+					let playerLaserTop = new Laser({x: 200, y: playerInfo.y + (playerInfo.height/2) - 30 - 80}, 0, 500, 'red');
+					playerLaserArray.push(playerLaserTop);
+					let playerLaserMid = new Laser({x: 200, y: playerInfo.y + (playerInfo.height/2) - 30}, 0, 500, 'red');
+					playerLaserArray.push(playerLaserMid);
+					let playerLaserBottom = new Laser({x: 200, y: playerInfo.y + (playerInfo.height/2) - 30 + 80}, 0, 500, 'red');
+					playerLaserArray.push(playerLaserBottom);
+					let playerLaserTop2 = new Laser({x: 200, y: playerInfo.y + (playerInfo.height/2) - 30 - 160}, 0, 500, 'red');
+					playerLaserArray.push(playerLaserTop2);
+					let playerLaserBottom2 = new Laser({x: 200, y: playerInfo.y + (playerInfo.height/2) - 30 + 160}, 0, 500, 'red');
+					playerLaserArray.push(playerLaserBottom2);
+					sound3.play();
+					killCount = 0;
+					t = 0;
+				}
+				else if(i === 1 && killCount3 >= 20) {
+					newTime2 = currentTime;
+					activateShield = true;
+					killCount3 = 0;
+				}
+				else if(i === 13 && t2 > 5 && moveTurretDown) {
+					turret1.y += 80;
+					moveTurretUp = true;
+					if(turret1.y >= 515) moveTurretDown = false;
+					t2 = 0;
+				}
+				else if(i === 12 && t2 > 5 && moveTurretUp) {
+					turret1.y -= 80;
+					moveTurretDown = true;
+					if(turret1.y <= 115) moveTurretUp = false;
+					t2 = 0;
+				}
+			}
+		}
+		if(activateShield) {
+			let shield = new Shield(playerInfo.x, playerInfo.y);
+			shield.drawShield();
+			shield.testCollision();
+		}
+		if(currentTime - newTime2 > 3000) {
+			activateShield = false;
+		}
+		
+		if(freeze) {
+			enemyArray.forEach( function(enemy1) {
+				enemy1.x += calcDistanceToMove(delta, enemy1.speed);
+			});
+			continueSpawn = false;
+		}
+		if(currentTime - newTime > 2000) {
+			continueSpawn = true;
+			freeze = false;
+		}
+		t++;
+		t2++;
+		
+		if(sound2.currentTime > .1) {
+			sound2.currentTime = 0;
+			sound2.pause();
+		}
+		
+		if(currentTime - newTime3 > 700) {
+			turret1.fireLaser();
+			newTime3 = currentTime;
+		}
+		
+		enemyArray.forEach( function(enemy1, index) {
+			enemy1.drawEnemy();
+			enemy1.x -= calcDistanceToMove(delta, enemy1.speed);
+			enemy1.testForExit(index);
+		});
+		
+		playerLaserArray.forEach( function(laser, index) {
+			laser.createLaser();
+			laser.origin.x += calcDistanceToMove(delta, laser.speed);
+			laser.testForPlayerLaserExit();
+			laser.testForCollision();
+			if(contactMade) {
+				//console.log("disappear!");
+				playerLaserArray.splice(index, 1);
+			}
+			contactMade = false;
+		});
+		
+		enemyLaserArray.forEach( function(laser, index) {
+			laser.createLaser();
+			laser.origin.x += calcDistanceToMove(delta, laser.speed);
+			laser.testForEnemyLaserExit(index);
+			laser.testForPlayerCollision(index);
+		});
+		
+		turretLaserArray.forEach( function(laser, index) {
+			laser.createLaser();
+			laser.origin.x += calcDistanceToMove(delta, laser.speed);
+			laser.testForTurretLaserExit();
+			laser.testForTEnemyCollision(index);
+		});
+		
+		createLaserBox();
+		createAbilityCircle();
+		createAbility2Circle();
+		createAbility3Circle();
+		
+		if(displayWaveTitle) {
+			displayWave('Wave 11');
+		}
+		
+		if(enemyArray.length === 0 && eCount >= 40) {
+			displayCompletedScreen(11);
+		}
+		if(playerHealth <= 0) {
+			endScreen();
+		}
+		
+		ctx.restore();
+	
+		oldTime = currentTime;
+	}
+	animation = requestAnimationFrame(mainLoop11);
+}
+
+function checkForWave12Start() {
+	if(waveNum === 11.11 && gamepad) {
+		scanGamepads();
+		for(let i = 0; i < gamepad.buttons.length; i++) {
+			let b = gamepad.buttons[i];
+			if(b.pressed) {
+				console.log("next wave");
+				if(i === 0) {
+					beginWave12();
+				}
+			}
+		}
+		//console.log("hello");
+	}
+	animation2 = requestAnimationFrame(checkForWave12Start);
+}
+
+function beginWave12() {
+	killCount = 0;
+	playerLaserArray = [];
+	enemyArray = [];
+	eCount = 0;
+	t = 0;
+	laserFired = 0;
+	displayWaveTitle = true;
+	waveNum = 12;
+	oldTime = 0;
+	enemyLaserArray = [];
+	killCount2 = 0;
+	continueSpawn = true;
+	killCount3 = 0;
+	activateShield = false;
+	turret1.y = 275;
+	turret1.speed = 700;
+	newTime3 = 0;
+	turretLaserArray = [];
+	t2 = 0;
+	moveTurretUp = true;
+	moveTurretDown = true;
+
+	ctx.save();
+	
+	ctx.clearRect(0, 0, w, h);
+	
+	inputImages();
+	
+	playerInfo.y = 300;
+	
+	clearInterval(interval1);
+	clearInterval(interval2);
+	cancelAnimationFrame(animation);
+	cancelAnimationFrame(animation2);
+	
+	interval1 = setInterval(firePower, 500);
+	interval2 = setInterval(displayTitle, 1000);
+	spawnEnemies(12);
+	
+	requestAnimationFrame(mainLoop12);
+	
+	ctx.restore();
+}
+
+function mainLoop12(currentTime) {
+	if(waveNum === 12 && gamepad) {
+		
+		scanGamepads();
+		delta = currentTime - oldTime;
+		let incY = calcDistanceToMove(delta, 400);
+		
+		ctx.save();
+		ctx.clearRect(0, 0, w, h);
+	
+		inputImages();
+		ctx.drawImage(imageObj2, 0, 0, 70, 70, 320, 10, 40, 40);
+		ctx.drawImage(imageObj3, 0, 0, 70, 70, 670, 10, 40, 40);
+		ctx.drawImage(imageObj4, 0, 0, 240, 210, 250, 10, 40, 40);
+		ctx.drawImage(imageObj5, 0, 0, 70, 70, 800, 10, 40, 40);
+		ctx.drawImage(imageObj6, 0, 0, 70, 70, 930, 10, 40, 40);
+		
+		drawHealth();
+	
+		checkForPlayerMove(incY);
+		turret1.drawTurret();
+		
+		for(let i = 0; i < gamepad.buttons.length; i++) {
+			let button = gamepad.buttons[i];
+			if(button.pressed) {
+				if(i === 2 && killCount2 >= 50) {
+					newTime = currentTime;
+					freeze = true;
+					killCount2 = 0;
+					sound5.play();
+				}
+				else if(i === 7) {
+					if(t > 15 && laserFired < 5) {
+						let playerLaser = new Laser({x: 200, y: playerInfo.y + (playerInfo.height/2) - 30}, 0, 500, 'red');
+						playerLaserArray.push(playerLaser);
+						sound2.play();
+						t = 0;
+						laserFired++;
+					}
+				}
+				else if(i === 6 && killCount >= 5 && t > 15) {
+					let playerLaserTop = new Laser({x: 200, y: playerInfo.y + (playerInfo.height/2) - 30 - 80}, 0, 500, 'red');
+					playerLaserArray.push(playerLaserTop);
+					let playerLaserMid = new Laser({x: 200, y: playerInfo.y + (playerInfo.height/2) - 30}, 0, 500, 'red');
+					playerLaserArray.push(playerLaserMid);
+					let playerLaserBottom = new Laser({x: 200, y: playerInfo.y + (playerInfo.height/2) - 30 + 80}, 0, 500, 'red');
+					playerLaserArray.push(playerLaserBottom);
+					let playerLaserTop2 = new Laser({x: 200, y: playerInfo.y + (playerInfo.height/2) - 30 - 160}, 0, 500, 'red');
+					playerLaserArray.push(playerLaserTop2);
+					let playerLaserBottom2 = new Laser({x: 200, y: playerInfo.y + (playerInfo.height/2) - 30 + 160}, 0, 500, 'red');
+					playerLaserArray.push(playerLaserBottom2);
+					sound3.play();
+					killCount = 0;
+					t = 0;
+				}
+				else if(i === 1 && killCount3 >= 20) {
+					newTime2 = currentTime;
+					activateShield = true;
+					killCount3 = 0;
+				}
+				else if(i === 13 && t2 > 5 && moveTurretDown) {
+					turret1.y += 80;
+					moveTurretUp = true;
+					if(turret1.y >= 515) moveTurretDown = false;
+					t2 = 0;
+				}
+				else if(i === 12 && t2 > 5 && moveTurretUp) {
+					turret1.y -= 80;
+					moveTurretDown = true;
+					if(turret1.y <= 115) moveTurretUp = false;
+					t2 = 0;
+				}
+			}
+		}
+		if(activateShield) {
+			let shield = new Shield(playerInfo.x, playerInfo.y);
+			shield.drawShield();
+			shield.testCollision();
+		}
+		if(currentTime - newTime2 > 3000) {
+			activateShield = false;
+		}
+		
+		if(freeze) {
+			enemyArray.forEach( function(enemy1) {
+				enemy1.x += calcDistanceToMove(delta, enemy1.speed);
+			});
+			continueSpawn = false;
+		}
+		if(currentTime - newTime > 4000) {
+			continueSpawn = true;
+			freeze = false;
+		}
+		t++;
+		t2++;
+		
+		if(sound2.currentTime > .1) {
+			sound2.currentTime = 0;
+			sound2.pause();
+		}
+		
+		if(currentTime - newTime3 > 700) {
+			turret1.fireLaser();
+			newTime3 = currentTime;
+		}
+		
+		enemyArray.forEach( function(enemy1, index) {
+			enemy1.drawEnemy();
+			enemy1.x -= calcDistanceToMove(delta, enemy1.speed);
+			enemy1.testForExit(index);
+		});
+		
+		playerLaserArray.forEach( function(laser, index) {
+			laser.createLaser();
+			laser.origin.x += calcDistanceToMove(delta, laser.speed);
+			laser.testForPlayerLaserExit();
+			laser.testForCollision();
+			if(contactMade) {
+				//console.log("disappear!");
+				playerLaserArray.splice(index, 1);
+			}
+			contactMade = false;
+		});
+		
+		enemyLaserArray.forEach( function(laser, index) {
+			laser.createLaser();
+			laser.origin.x += calcDistanceToMove(delta, laser.speed);
+			laser.testForEnemyLaserExit(index);
+			laser.testForPlayerCollision(index);
+		});
+		
+		turretLaserArray.forEach( function(laser, index) {
+			laser.createLaser();
+			laser.origin.x += calcDistanceToMove(delta, laser.speed);
+			laser.testForTurretLaserExit();
+			laser.testForTEnemyCollision(index);
+		});
+		
+		createLaserBox();
+		createAbilityCircle();
+		createAbility2Circle();
+		createAbility3Circle();
+		
+		if(displayWaveTitle) {
+			displayWave('Wave 12');
+		}
+		
+		if(enemyArray.length === 0 && eCount >= 40) {
+			displayCompletedScreen(12);
+		}
+		if(playerHealth <= 0) {
+			endScreen();
+		}
+		
+		ctx.restore();
+	
+		oldTime = currentTime;
+	}
+	animation = requestAnimationFrame(mainLoop12);
 }
