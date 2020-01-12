@@ -1,0 +1,13 @@
+<?wpl version="1.0"?>
+<smil>
+    <head>
+        <meta name="Generator" content="Microsoft Windows Media Player -- 12.0.9600.19482"/>
+        <meta name="ItemCount" content="1"/>
+        <title>tiger</title>
+    </head>
+    <body>
+        <seq>
+            <media src="..\..\Coding\HTML2\media\tiger.mp4"/>
+        </seq>
+    </body>
+</smil>
